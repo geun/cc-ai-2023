@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"skip\" && exit 0",
     "deploy": "aws s3 sync ./src s3://chattingcat-ai-static-web --exclude '*.DS_Store' --exclude '*.nojekyll' --exclude '*.md' --profile chattingcat-deployer",
-    "postdeploy": "aws cloudfront create-invalidation --distribution-id E21WT5D8R63R7C --paths \"/*\" --profile chattingcat-deployer --output text",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E1UM67DKT2A3NQ --paths \"/*\" --profile chattingcat-deployer --output text",
     "start": "http-server -p 8080"
   },
   "author": "",
