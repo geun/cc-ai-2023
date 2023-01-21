@@ -1,0 +1,65 @@
+<html>
+  <link rel="stylesheet" href="style.css">
+  
+<script src='/jquery-3.5.1.min.js'></script>
+<script>
+  $(function(){updateCharCount();})
+  async function submitOriginal(inNum, outNum) {
+    var email=$('#email').val();
+    if (!email || !email.toString().includes("@")) {showError("You must provide a valid email address.<br>["+email+"] is not a valid address.");return;}
+    var oText=$('#area'+inNum).val();
+    var noteX=$('#note'+inNum).val();
+    if (!oText || oText.length>3000) {showError("The input text must be under 3000 characters.<br>Your input now contains "+oText.length+" characters."); return;}
+    $('#area'+outNum).val("Loading...");
+    const response = await fetch("http://3.83.136.146:41420/api/generate_diffAICC", {
+        method: "POST", headers: {"Content-Type": "application/json",},
+        body: JSON.stringify({ inputText: oText, correctionNote: noteX }),
+      });
+    const data = await response.json();
+    $('#area'+outNum).val(data.correctedText);
+    $('#diffArea').html(data.diffHTML);
+  }
+  function showError(etext) {$('#emess').html(etext);$('#overlay').show();}
+  function updateCharCount() {$('#char_count').html($('#area1').val().length);}
+  </script>
+
+  <head>
+  <title>AI ChattingCat</title>
+  <link rel="icon" href="/images/favicon-32x32.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  
+  <body>
+    <div class="container grid1">
+      <div class="cell"><p align="left"><a target="_self" href="/aicc.html" aria-current="page"><img src="/images/aiccLogo2.png" width="300" alt="ChattingCat - Perfect Your English"</a></p></div>
+      <div class="cell"><p align="right"><a target="_blank" href="https://donorbox.org/supportaicc"><button class='button-1' type=".button"><span>DONATE</span></button></a></p></div>  
+  </div>
+
+ <div id='overlay'>
+    <div id='popover'><div class='pheader'>ERROR</div><div id='emess'></div><div class='pfooter'><a href='#' onclick='$("#overlay").hide();' align='right'>CLOSE</a></div></div>
+  </div>
+ 
+
+  <form onSubmit="event.preventDefault();submitOriginal(1,2);">
+    Enter your email: <input id='email' type='text' cols=20/>
+  
+    <div class='top'>
+    <textarea id='area1' rows=8 oninput='updateCharCount();' placeholder="Type or paste your text here..."></textarea><br>
+    <input id='note1' width="100%" type='text' placeholder="Additional request (optional)" style="font-style:italic"; border:solid 1px #E5E4E2;>
+  
+  
+  </div>
+<span id='char_count'>0</span>/3000<br>    <input type='submit' value='Submit'/> 
+
+  </form>
+  <hr>
+  <form onSubmit="event.preventDefault();submitOriginal(2,3);">
+  <div class='top'>CORRECTED<br>
+    <textarea id='area2' rows=8 cols=51></textarea></div>
+  </form>
+  <div id='diffArea'>EMPTY DIFF</div>
+  
+  </body>
+  </html>
+  
+  
