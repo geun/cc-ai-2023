@@ -2,10 +2,11 @@
   "name": "code-aicc",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "src/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "",
+    "test": "echo \"skip\" && exit 0",
+    "deploy": "aws s3 sync ./src s3://chattingcat.com --exclude '*.DS_Store' --exclude '*.nojekyll' --exclude '*.md' --profile chattingcat-deployer",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E3BIA4LQDORKAM --paths \"/*\"",
     "start": "http-server -p 8080"
   },
   "author": "",
